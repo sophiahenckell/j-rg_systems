@@ -1,0 +1,15 @@
+## SETUP with preinstalled packages: virtualenv -p /usr/bin/python2.7 --system-site-packages pyBDsim
+#Cython
+#pygsl
+#nlopt  # use package manager or compile locally!
+#bintrees # not needed anymore
+
+numpy
+h5py
+
+scipy
+matplotlib
+simpy
+#sympy
+
+line_profiler

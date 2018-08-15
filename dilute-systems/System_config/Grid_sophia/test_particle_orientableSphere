@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+"""
+Created on Fri Feb 23 15:00 2018
+
+@author: sophia
+"""
+''' Methode scheint zu funktionieren. 
+Einziger ausnahmefall: wenn eine Geschwindigkeit gespiegelt wird. beispiel: setze
+Particle 1: pos: 000 vel 000
+Particle 2: pos: 251 vel -800
+im vergleich dazu: 
+Particle 1: pos: 000 vel 000
+Paritcle 2: pos: 250 vel -800'''
+import os
+
+from bedsim import particle
+#import bedsim.sysgen.ellipse_grid as ellipse_grid
+from bedsim.sysgen.ellipse_grid import TestSystem
+from bedsim.simulation import Simulation
+import Grid_sophia.events_smallVersion
+
+def test_particle_orientableSphere():
+    Kugel3d = particle.SphereOrientable(major=1, minor=1, minor2=1, angle=0, angvel=0, position=[1, 0, 0], pinned=None,
+                                        id=1, velocity=[1, 0, 0])
+    print(Kugel3d.mass())
+    pass
+
+def test_particle_simulation():
+    #gen = EllipseBenchmarkRandom()
+    particles = [ {"type": "SphereOrientable", "id": 1, "position": [0 ,0, 0], "velocity": [3.3, 2.5, 0],
+                    "angle": [0, 1., 0, 0.], "angvel": [0, 0, 0], "major": 1.5, "minor": 1.,
+                   "minor2": 1., "pinned": False, 'radius': 1
+                   },
+                  {"type": "SphereOrientable", "id": 2, "position": [3., 3., 0.], "velocity": [0.,0., 0],
+                   "angle": [0, 1., 0, 0], "angvel": [0, 0, 0], "major": 1.5, "minor": 1.,
+                   "minor2": 1., "pinned": False, 'radius': 1
+                   },
+            ]
+    gen = TestSystem(20.,particles)
+    # generate from file if needed
+    gen.generate()
+    config_filename = "test_simulation.h5"
+    save_filename = "test_simulation2.h5"
+    try:
+        os.remove(config_filename)  # cleanup
+        os.remove(save_filename)  # cleanup
+    except FileNotFoundError:
+        pass
+    gen.save_to_file(config_filename)
+
+    ## START NEWTONIAN EQUILIBRATION
+    sim = Simulation(config_filename=config_filename, output_filename=save_filename, system_lifetime=20.,
+                     brownian_timestep=None,  saving_timestep=0.5, swelling_rate=None,
+                     packing_fraction=0.1, aspect_ratio=1.5,
+                     verbose=True)
+    sim.start()
+    for p in sim.system._particles:
+        print(p)
+
+    p1 = sim.system._particles[0]
+    p2 = sim.system._particles[1]
+
+    print(p1.tpw_collision_time(p2))
+    #print('collision', p1.collision(p2,0))
+
+
+    #
+    # for p in sim.system._particles:
+    #     print(p)
+
+
+if __name__ == "__main__":
+    #test_particle_orientableSphere()
+    test_particle_simulation()
+    pass

@@ -18,8 +18,8 @@ def start(path, brownian_timestep, saving_timestep, swelling_rate, system_lifeti
     np.random.seed(simulation_id) # set seeding here so that it is easier to see
 
     ## choose system type
-    gen = EllipseBenchmarkRandom()
-    #gen = FCCLatticeGenerator()
+    #gen = EllipseBenchmarkRandom()
+    gen = FCCLatticeGenerator()
 
     ########################
     #    choose process    #
@@ -53,7 +53,7 @@ def start(path, brownian_timestep, saving_timestep, swelling_rate, system_lifeti
     gen.save_to_file(config_filename)
 
     ## START NEWTONIAN EQUILIBRATION
-    sim = Simulation(config_filename=config_filename, output_filename=config_filename, system_lifetime=system_lifetime, brownian_timestep=brownian_timestep,  saving_timestep=saving_timestep, swelling_rate = None, packing_fraction = packing_fraction, aspect_ratio = aspect_ratio, verbose=verbose)
+    sim = Simulation(config_filename=config_filename, output_filename=config_filename, system_lifetime=system_lifetime, brownian_timestep= None,  saving_timestep=saving_timestep, swelling_rate = None, packing_fraction = packing_fraction, aspect_ratio = aspect_ratio, verbose=verbose)
     sim.start()
     sys.exit()
 
@@ -82,5 +82,5 @@ if __name__ == '__main__':
 
     start(args.path, args.brownian_timestep, args.saving_timestep, args.swelling_rate, args.system_lifetime, args.packing_fraction, args.particle_number, args.aspect_ratio, np.float64(args.radius), args.simulation_id,  args.verbose)
 
-    #start("./data", 0.01, 0.001, 0, 1000, 0.03, 32, 0, np.float64(1), 1, True)
+   # start("./data", 0.01, 0.001, 0, 1000, 0.03, 32, 0, np.float64(1), 1, True)
 

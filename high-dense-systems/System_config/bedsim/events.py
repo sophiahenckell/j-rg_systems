@@ -57,7 +57,7 @@ class Event(object):
         """
         tb = self.event_manager.system.system_properties.brownian_timestep
         if tb is None:
-            until = 0.1 # FIXME: depends on packing fraction!
+            until = 0.01 # FIXME: depends on packing fraction!
         else:
             now = self.event_manager.system.system_properties.localtime() % tb
             until = 0.01 # FIXME: brownian_timestep - (current_time % brownian_timestep)
@@ -79,7 +79,7 @@ class Event(object):
             for neigh_cell in [particle.cell] + particle.cell.neighbours: # check for collisions of particle in its own cell + neighbour cells
                 
                 for neigh_particle in neigh_cell.particles:
-                    #if self.event_manager.system.boundary.delta_norm(particle.position,neigh_particle.position) <= (particle.major +neigh_particle.major + 0.2): ##VERLET list
+                    if self.event_manager.system.boundary.delta_norm(particle.position,neigh_particle.position) <= (particle.major +neigh_particle.major + 0.25): ##VERLET list
                         pid2 = int(neigh_particle._id)
                         if pid1 < pid2:
                             key = (pid1, pid2)
